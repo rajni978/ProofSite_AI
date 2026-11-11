@@ -1,9 +1,19 @@
 import type { ProjectPreview } from "@/types/dashboard";
 import { StatusBadge } from "./StatusBadge";
 
-export function ProjectCard({ project }: { project: ProjectPreview }) {
+export function ProjectCard({
+  project,
+  onOpen,
+  expanded,
+  detailsId,
+}: {
+  project: ProjectPreview;
+  onOpen?: () => void;
+  expanded?: boolean;
+  detailsId?: string;
+}) {
   return (
-    <article className="project-card">
+    <article className={`project-card${onOpen ? " is-interactive" : ""}`}>
       <div className="project-card-heading">
         <span className={`project-avatar project-avatar-${project.accent}`}>
           {project.initials}
@@ -35,6 +45,20 @@ export function ProjectCard({ project }: { project: ProjectPreview }) {
         <span>{project.subcontractors} subcontractors</span>
         <span>Due {project.completionDate}</span>
       </div>
+      {onOpen && (
+        <button
+          type="button"
+          className="project-open-button"
+          onClick={onOpen}
+          aria-expanded={expanded}
+          aria-controls={detailsId}
+        >
+          {expanded ? "Hide project details" : "View project details"}
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
+            <path d="M3 8h10m-4-4 4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      )}
     </article>
   );
 }

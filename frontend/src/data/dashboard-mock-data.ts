@@ -49,6 +49,27 @@ export const dashboardPreviewData: DashboardPreviewData = {
     { label: "Needs review", count: 9, status: "Needs review" },
     { label: "Incomplete", count: 14, status: "Incomplete" },
   ],
+  verificationQueue: [
+    { id: "v-1", title: "Level 4 framing milestone", project: "Riverside Commercial Tower", submittedBy: "Summit Concrete", age: "18 min ago", status: "Needs review" },
+    { id: "v-2", title: "Fall protection inspection", project: "Northline Medical Center", submittedBy: "Ironwood Electrical", age: "42 min ago", status: "Flagged" },
+    { id: "v-3", title: "Daily progress report", project: "Cedar Grove Residences", submittedBy: "Cedar Build Group", age: "1 hr ago", status: "Verified" },
+    { id: "v-4", title: "Concrete pour · foundation", project: "Riverside Commercial Tower", submittedBy: "Summit Concrete", age: "2 hr ago", status: "Incomplete" },
+    { id: "v-5", title: "Firestopping inspection", project: "Northline Medical Center", submittedBy: "Northline Mechanical", age: "3 hr ago", status: "Needs review" },
+    { id: "v-6", title: "Site access checklist", project: "Cedar Grove Residences", submittedBy: "Cedar Build Group", age: "Yesterday", status: "Verified" },
+  ],
+  attendanceOverview: {
+    onsite: 146,
+    scheduled: 159,
+    trend: [
+      { label: "Mon", attendance: 91 },
+      { label: "Tue", attendance: 94 },
+      { label: "Wed", attendance: 88 },
+      { label: "Thu", attendance: 96 },
+      { label: "Fri", attendance: 92 },
+      { label: "Sat", attendance: 76 },
+      { label: "Sun", attendance: 0 },
+    ],
+  },
   activities: [
     { id: "a-1", title: "Worker checked in", detail: "Marcus Lee · Riverside Tower", time: "8:42 AM", icon: "attendance", tone: "blue" },
     { id: "a-2", title: "Safety evidence submitted", detail: "Ironwood Electrical · Northline Medical", time: "8:18 AM", icon: "safety", tone: "teal" },
@@ -70,6 +91,13 @@ export const dashboardPreviewData: DashboardPreviewData = {
     { id: "wt-1", title: "Install conduit · Level 3 east wing", project: "Riverside Tower", due: "Today", status: "In progress" },
     { id: "wt-2", title: "Upload end-of-day work photos", project: "Riverside Tower", due: "Today", status: "To do" },
     { id: "wt-3", title: "Complete toolbox safety review", project: "Riverside Tower", due: "Tomorrow", status: "To do" },
+  ],
+  workerSafetyItems: [
+    { id: "s-1", label: "Hard hat and high-visibility vest", complete: true },
+    { id: "s-2", label: "Eye and hand protection", complete: true },
+    { id: "s-3", label: "Work area hazard review", complete: true },
+    { id: "s-4", label: "Emergency exits identified", complete: true },
+    { id: "s-5", label: "Tool condition check", complete: false },
   ],
   workerProject: {
     id: "wp-1",

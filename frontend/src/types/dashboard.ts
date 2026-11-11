@@ -52,6 +52,32 @@ export interface VerificationSummary {
   status: VerificationStatus;
 }
 
+export interface VerificationQueueItem {
+  id: string;
+  title: string;
+  project: string;
+  submittedBy: string;
+  age: string;
+  status: VerificationStatus;
+}
+
+export interface AttendanceTrendPoint {
+  label: string;
+  attendance: number;
+}
+
+export interface AttendanceOverview {
+  onsite: number;
+  scheduled: number;
+  trend: AttendanceTrendPoint[];
+}
+
+export interface WorkerSafetyItem {
+  id: string;
+  label: string;
+  complete: boolean;
+}
+
 export interface ActivityPreview {
   id: string;
   title: string;
@@ -88,10 +114,13 @@ export interface DashboardPreviewData {
   adminStats: DashboardStat[];
   projects: ProjectPreview[];
   verifications: VerificationSummary[];
+  verificationQueue: VerificationQueueItem[];
+  attendanceOverview: AttendanceOverview;
   activities: ActivityPreview[];
   pendingActions: PendingActionPreview[];
   workerAttendance: WorkerAttendancePreview[];
   workerTasks: WorkerTaskPreview[];
+  workerSafetyItems: WorkerSafetyItem[];
   workerProject: ProjectPreview;
   workerSafetyComplete: number;
   workerSafetyTotal: number;

@@ -14,6 +14,8 @@ export interface AuthUser {
   email: string;
   role: UserRole;
   status: UserStatus;
+  organizationId: string | null;
+  onboardingStatus: "NOT_REQUIRED" | "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
   createdAt: string;
   updatedAt: string;
 }

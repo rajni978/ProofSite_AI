@@ -12,6 +12,15 @@ const AUTH_COOKIE_MAX_AGE = 60 * 60;
 
 type JsonRecord = Record<string, unknown>;
 
+function isOnboardingStatus(
+  value: unknown,
+): value is AuthUser["onboardingStatus"] {
+  return value === "NOT_REQUIRED" ||
+    value === "NOT_STARTED" ||
+    value === "IN_PROGRESS" ||
+    value === "COMPLETED";
+}
+
 function isRecord(value: unknown): value is JsonRecord {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -28,20 +37,42 @@ function isUserStatus(value: unknown): value is UserStatus {
 export function parseAuthUser(value: unknown): AuthUser | null {
   if (!isRecord(value)) return null;
 
-  const { id, fullName, email, role, status, createdAt, updatedAt } = value;
+  const {
+    id,
+    fullName,
+    email,
+    role,
+    status,
+    organizationId,
+    onboardingStatus,
+    createdAt,
+    updatedAt,
+  } = value;
   if (
     typeof id !== "string" ||
     typeof fullName !== "string" ||
     typeof email !== "string" ||
     !isUserRole(role) ||
     !isUserStatus(status) ||
+    (organizationId !== null && typeof organizationId !== "string") ||
+    !isOnboardingStatus(onboardingStatus) ||
     typeof createdAt !== "string" ||
     typeof updatedAt !== "string"
   ) {
     return null;
   }
 
-  return { id, fullName, email, role, status, createdAt, updatedAt };
+  return {
+    id,
+    fullName,
+    email,
+    role,
+    status,
+    organizationId,
+    onboardingStatus,
+    createdAt,
+    updatedAt,
+  };
 }
 
 export async function readJson(response: Response): Promise<unknown> {
@@ -80,6 +111,15 @@ export function getBackendAuthUrl(endpoint: "register" | "login" | "me"): string
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) return null;
   return new URL(`${baseUrl.pathname}/auth/${endpoint}`, baseUrl).toString();
+}
+
+export function getBackendOnboardingUrl(
+  endpoint: "root" | "draft" | "complete",
+): string | null {
+  const baseUrl = getApiBaseUrl();
+  if (!baseUrl) return null;
+  const suffix = endpoint === "root" ? "" : `/${endpoint}`;
+  return new URL(`${baseUrl.pathname}/onboarding${suffix}`, baseUrl).toString();
 }
 
 export function isSameOriginRequest(request: Request): boolean {

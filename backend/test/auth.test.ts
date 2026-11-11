@@ -54,7 +54,9 @@ test("user defaults are safe and serialized users omit passwords", () => {
 
   assert.equal(user.role, "WORKER");
   assert.equal(user.status, "ACTIVE");
+  assert.equal(user.onboardingStatus, "NOT_REQUIRED");
   assert.equal("password" in serializedUser, false);
+  assert.equal(serializedUser.onboardingStatus, "NOT_REQUIRED");
   assert.equal("password" in User.schema.paths, true);
   assert.equal(User.schema.path("password").options.select, false);
 
@@ -69,6 +71,29 @@ test("user defaults are safe and serialized users omit passwords", () => {
     updatedAt: new Date(),
   });
   assert.equal(legacyDisabledUser.status, "DISABLED");
+});
+
+test("administrator users require onboarding by default", () => {
+  const user = new User({
+    fullName: "Main Contractor",
+    email: "admin@example.com",
+    password: "already-hashed-value",
+    role: "ADMIN",
+  });
+
+  assert.equal(user.onboardingStatus, "NOT_STARTED");
+
+  const legacyAdmin = User.hydrate({
+    _id: "507f1f77bcf86cd799439012",
+    fullName: "Legacy Admin",
+    email: "legacy-admin@example.com",
+    password: "hashed-password",
+    role: "ADMIN",
+    status: "ACTIVE",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+  assert.equal(legacyAdmin.onboardingStatus, "NOT_STARTED");
 });
 
 test("password hashing can be verified without retaining the plain password", async () => {

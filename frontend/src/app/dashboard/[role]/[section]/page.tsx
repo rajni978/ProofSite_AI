@@ -22,6 +22,10 @@ export default async function DashboardSectionPage({
     redirect(`/dashboard/${rolePath}`);
   }
 
+  if (user.role === "ADMIN" && user.onboardingStatus !== "COMPLETED") {
+    redirect("/onboarding");
+  }
+
   const navigationItem = getNavigationItem(user.role, section);
   if (!navigationItem || !navigationItem.section) {
     redirect(`/dashboard/${rolePath}`);

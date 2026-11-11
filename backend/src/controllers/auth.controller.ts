@@ -10,6 +10,8 @@ function toPublicUser(user: {
   email: string;
   role: string;
   status: string;
+  organizationId?: { toString(): string } | null;
+  onboardingStatus: string;
   createdAt: Date;
   updatedAt: Date;
 }) {
@@ -19,6 +21,8 @@ function toPublicUser(user: {
     email: user.email,
     role: user.role,
     status: user.status,
+    organizationId: user.organizationId?.toString() ?? null,
+    onboardingStatus: user.onboardingStatus,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };

@@ -66,6 +66,30 @@ Open [http://localhost:3000](http://localhost:3000). Check the backend at
 [http://localhost:5000/api/health](http://localhost:5000/api/health); a healthy
 response is `{"status":"ok"}`.
 
+## Provision the initial main contractor
+
+Public registration always creates a `WORKER` account. To provision the initial
+main contractor administrator, run this one-time operator command from the
+backend directory after configuring `backend/.env` and connecting to a MongoDB
+replica set:
+
+```bash
+cd backend
+npm run bootstrap:admin
+```
+
+The command prompts for the administrator name, work email, and password; the
+password is entered without terminal echo. It refuses to run if an administrator
+or the one-time bootstrap record already exists. The administrator signs in at
+`/login`, completes company, contact, and first-project onboarding, and is then
+sent to the admin dashboard. Do not expose administrator provisioning through
+public registration or an HTTP endpoint.
+
+Onboarding draft and completion operations use MongoDB transactions, so the
+configured deployment must support transactions (for example, a replica set).
+The backend initializes the onboarding collections and indexes before serving
+requests.
+
 ## Build and run the backend in production
 
 ```bash
@@ -79,15 +103,27 @@ it with `npm start` from that directory.
 
 ## Current scope
 
-The API currently provides a health check, JSON 404 responses, CORS for the
-local frontend origin, and centralized error handling. Authentication is
-available through:
+The API provides a health check, JSON 404 responses, CORS for the configured
+frontend origin, and centralized error handling. Authentication is available
+through:
 
 - `POST /api/auth/register` with `{ "fullName", "email", "password" }`
 - `POST /api/auth/login` with `{ "email", "password" }`
+- `GET /api/auth/me` for the authenticated account profile
 
-Both authentication endpoints return a user object and a one-hour JWT. Public
-registration always assigns the `WORKER` role; submitted roles are not used.
-Authenticated routes can use the provided JWT authentication and role
-authorization middleware. AI integrations and image storage are not configured
-yet.
+Login and registration return a user profile and a one-hour JWT. The Next.js
+frontend stores the token in an HttpOnly cookie. Public registration always
+assigns the `WORKER` role; submitted roles are not used.
+
+Authenticated main contractor onboarding endpoints:
+
+- `GET /api/onboarding` retrieves only the authenticated administrator's draft.
+- `PUT /api/onboarding/draft` saves one validated `company`, `contact`, or
+  `firstProject` step.
+- `POST /api/onboarding/complete` creates the initial project and marks the
+  organization and administrator onboarding complete in a transaction. The
+  operation is safe to retry.
+
+The onboarding endpoints require an authenticated `ADMIN` and derive ownership
+from the verified token. GPS attendance, AI verification, payment processing,
+and live project integrations are not connected in the current product preview.

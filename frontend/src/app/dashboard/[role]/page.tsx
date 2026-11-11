@@ -33,6 +33,10 @@ export default async function RoleWorkspacePage({
     redirect(`/dashboard/${userRolePath}`);
   }
 
+  if (user.role === "ADMIN" && user.onboardingStatus !== "COMPLETED") {
+    redirect("/onboarding");
+  }
+
   const roleTitle = roleTitles[user.role];
   if (!roleTitle) redirect("/dashboard");
 
